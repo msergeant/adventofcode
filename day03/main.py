@@ -3,6 +3,7 @@ def points_crossed(wire_path):
 
     position = [0, 0]
     points = []
+    steps = 1
     for vector in vectors:
         direction = vector[0]
         distance = int(vector[1:])
@@ -21,7 +22,8 @@ def points_crossed(wire_path):
             y = -1
 
         for i in range(1, distance + 1):
-            points.append((position[0] + i * x, position[1] + i * y))
+            points.append((position[0] + i * x, position[1] + i * y, steps))
+            steps += 1
 
         position[0] = points[-1][0]
         position[1] = points[-1][1]
@@ -48,19 +50,20 @@ def main():
         start = wire2_index.get(point[0])
         if start:
             for idx in range(start, len(wire2_points)):
-                if wire2_points[idx] == point:
-                    intersection.append(point)
+                point2 = wire2_points[idx]
+
+                if (point2[0] != point[0] or
+                    point2[1] > point[1]):
                     break
 
-                if (wire2_points[idx][0] != point[0] or
-                    wire2_points[idx][1] > point[1]):
+                if point2[1] == point[1]:
+                    intersection.append((point[0], point[1], point[2] + point2[2]))
                     break
-
-
 
     part1 = min(map(lambda x: abs(x[0]) + abs(x[1]), intersection))
+    part2 = min(map(lambda x: x[2], intersection))
 
-    return part1
+    return part1, part2
 
 print("The answer to part 1 is %d\n"
-      "The answer to part 2 is " % main())
+      "The answer to part 2 is %d" % main())
