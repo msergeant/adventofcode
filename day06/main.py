@@ -16,6 +16,12 @@ class Orbiter:
         else:
             return 0
 
+    def parent_orbits(self):
+        if self.parent:
+            return [str(self.parent)] + self.parent.parent_orbits()
+        else:
+            return []
+
     def __str__(self):
         return f"{self.name}"
 
@@ -38,7 +44,12 @@ def main():
 
     part1 = sum(orb.orbit_count() for (_, orb) in graph.items())
 
-    return part1, -1
+    your_parents = graph['YOU'].parent_orbits()
+    santas_parents = graph['SAN'].parent_orbits()
+    common = [ i for i in your_parents if i in santas_parents]
+    part2 = your_parents.index(common[0]) + santas_parents.index(common[0])
+
+    return part1, part2
 
 print("The answer to part 1 is %d\n"
       "The answer to part 2 is %d" % main())
