@@ -5,7 +5,7 @@ class IntcodeComputer:
     def __init__(self, program, initial_input = None):
         self.program = program
         self.input_queue = deque()
-        if initial_input:
+        if initial_input != None:
             self.input_queue.appendleft(initial_input)
         self.index = 0
         self.relative_index = 0
