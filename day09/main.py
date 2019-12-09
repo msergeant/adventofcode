@@ -18,7 +18,13 @@ def main():
         if comp.index > 1:
             part1 = result
 
-    return part1, -1
+    comp = IntcodeComputer(bigger_list, 2)
+    while comp.index >= 0:
+        result = comp.run()
+        if comp.index > 1:
+            part2 = result
+
+    return part1, part2
 
 print("The answer to part 1 is %d\n"
       "The answer to part 2 is %d" % main())
