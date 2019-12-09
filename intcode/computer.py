@@ -26,7 +26,8 @@ class IntcodeComputer:
 
     def opcode_3(self, index):
         num = self.input_queue.pop()
-        self.program[self.program[index + 1]] = num
+        addr = self.parse_mode(index)[0]
+        self.program[addr] = num
         return 2, num
 
     def opcode_4(self, index):
@@ -63,11 +64,24 @@ class IntcodeComputer:
             self.program[target] = 0
         return 4, -1
 
+    def opcode_9(self, index):
+        num = self.parse_mode(index)[0]
+        self.relative_index += self.program[num]
+        return 2, -1
+
     def parse_mode(self, index):
         command = self.program[index]
         modes = [(command // 10**(x+2)) % 10 for x in range(0,3)]
         addr_len = min(3, len(self.program) - index - 1)
-        return [(index + 1 + i if modes[i] else self.program[index + 1 + i]) for i in range(0,addr_len)]
+        return [self.find_index(modes[i], index + 1 + i) for i in range(0,addr_len)]
+
+    def find_index(self, mode, addr):
+        if mode == 1:
+            return addr
+        elif mode == 2:
+            return self.relative_index + self.program[addr]
+        else:
+            return self.program[addr]
 
     def run_with_input(self, num):
         self.queue_input(num)
@@ -85,6 +99,7 @@ class IntcodeComputer:
             self.opcode_6,
             self.opcode_7,
             self.opcode_8,
+            self.opcode_9
         ]
 
         opcode = self.program[local_index]
