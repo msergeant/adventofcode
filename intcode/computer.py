@@ -104,7 +104,7 @@ class IntcodeComputer:
 
         opcode = self.program[local_index]
         answer = -1
-        while local_index < len(self.program) and opcode != 99:
+        while 0 <= local_index < len(self.program) and opcode != 99:
             offset, result = ops[opcode % 10](local_index)
             local_index += offset
             if(opcode % 10 == 4):
