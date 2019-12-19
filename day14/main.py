@@ -14,17 +14,28 @@ class Day14Runner:
                     numer, symbol = reactant.split(" ")
                     self.formulas[key]['re'][symbol] = int(numer)
 
-        total_cons = self.formulas['FUEL']['re']
+        part1 = self.total_fuel(1)
+
+        part2 = 4366186
+
+        result = self.total_fuel(part2)
+
+        print("Big?", result / 1000000000000)
+
+        return part1, part2
+
+    def total_fuel(self, units):
+        total_cons = {k: v * units
+                      for k, v in self.formulas['FUEL']['re'].items()}
         while not self.only_base(total_cons.keys()):
             leftover = total_cons.get('left', {})
             cons = [self.constituents(v, k, leftover)
                     for k, v in total_cons.items()]
             total_cons = reduce(self.combine_constituents, cons, {})
 
-        part1 = sum([self.ore_required(v, k)
+        return sum([self.ore_required(v, k)
                      for k, v in total_cons.items() if k != 'left'])
 
-        return part1, -1
 
     def only_base(self, keys):
         return all([k == 'left' or self.is_base(k) for k in keys])
