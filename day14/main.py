@@ -1,4 +1,4 @@
-from math import ceil
+from math import ceil, log10, floor
 from functools import reduce
 
 
@@ -16,11 +16,20 @@ class Day14Runner:
 
         part1 = self.total_fuel(1)
 
-        part2 = 4366186
+        trillion = 1000000000000
+        guess = trillion // part1
+        place = floor(log10(guess))
+        part2 = 0
 
-        result = self.total_fuel(part2)
+        while place >= 0:
+            next_guess = part2
+            place_val = 0
+            while self.total_fuel(next_guess) <= trillion:
+                place_val += 1
+                next_guess = part2 + place_val * 10 ** place
 
-        print("Big?", result / 1000000000000)
+            part2 = part2 + (place_val - 1) * 10 ** place
+            place -= 1
 
         return part1, part2
 
