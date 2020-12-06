@@ -10,12 +10,23 @@ def password_checker(lines):
 
     return correct
 
+def password_checker2(lines):
+    correct = 0
+    for line in lines:
+        rule, password = line.split(": ")
+        limits, char = rule.split(" ")
+        min, max = [int(x) for x in limits.split("-")]
+        if (password[min - 1] == char) ^ (password[max - 1] == char):
+            correct += 1
+
+    return correct
+
 
 def main():
     with open('./input') as file:
         lines = file.readlines()
         part_one = password_checker(lines)
-        part_two = 0
+        part_two = password_checker2(lines)
 
         return part_one, part_two
 
