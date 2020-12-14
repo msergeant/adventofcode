@@ -75,6 +75,22 @@ class PositionWaypointMover(PositionMover):
         self.waypoint_x += i * num
         self.waypoint_y += j * num
 
+    def handle_right(self, degrees):
+        times = degrees // 90
+
+        for i in range(times):
+            hold = self.waypoint_x
+            self.waypoint_x = self.waypoint_y
+            self.waypoint_y = hold * -1
+
+    def handle_left(self, degrees):
+        times = degrees // 90
+
+        for i in range(times):
+            hold = self.waypoint_x
+            self.waypoint_x = -1 * self.waypoint_y
+            self.waypoint_y = hold
+
 
 def find_new_distance(lines):
     mover = PositionMover()
