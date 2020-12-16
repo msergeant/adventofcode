@@ -1,19 +1,21 @@
-def twenty_twentieth(nums):
+def turnth(nums, goal):
     turn = 1
-    vals = {}
+    vals = [-1 for i in range(goal + 1)]
     last_num = 0
 
-    while turn <= 2020:
+    hold_num = 0
+    while turn <= goal:
         if turn <= len(nums):
             last_num = nums[turn - 1]
         else:
-            if not len(vals[last_num]) > 1:
+            if hold_num == -1:
                 last_num = 0
             else:
-                last_num = vals[last_num][-1] - vals[last_num][-2]
+                last_num = vals[last_num] - hold_num
 
-        vals[last_num] = vals.get(last_num) or []
-        vals[last_num].append(turn)
+        hold_num = vals[last_num]
+        vals[last_num] = turn
+
         turn += 1
 
     return last_num
@@ -21,8 +23,8 @@ def twenty_twentieth(nums):
 def main():
     with open('./input') as file:
         nums = [int(x) for x in file.read().split(',')]
-        part_one = twenty_twentieth(nums)
-        part_two = 0
+        part_one = turnth(nums, 2020)
+        part_two = turnth(nums, 30000000)
 
     return part_one, part_two
 
