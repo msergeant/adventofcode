@@ -3,15 +3,20 @@ def rules_process(rules, update):
         if k in rules:
             for v in rules[k]:
                 if (v in update and update.index(v) > i):
-                    return 0
+                    swapped = update
+                    swapped[update.index(v)] = k
+                    swapped[i] = v
+                    good, bad = rules_process(rules, swapped)
+                    return 0, max(good, bad)
 
-    return int(update[(len(update) - 1) // 2])
+    return int(update[(len(update) - 1) // 2]), 0
 
 
 def main():
     rulemode = True
     rules = {}
     total = 0
+    total2 = 0
     with open("input") as file:
         for line in file.readlines():
             stripped = line.strip()
@@ -25,9 +30,12 @@ def main():
                 else:
                     rules[k] = [v]
             else:
-                total += rules_process(rules, stripped.split(","))
+                good, bad = rules_process(rules, stripped.split(","))
+                total += good
+                total2 += bad
 
     print(f"The answer to part one is {total}")
+    print(f"The answer to part two is {total2}")
 
 
 main()
